@@ -1,5 +1,4 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+//import Necessary packages for image processing
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,11 +8,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        //Define File Path for input image
         File inputFile = new File("/media/om7521/Om_MidyaExt/CS_All/@SST/Lecs/Kshitij_Java/Image_editor/src/image.jpg");
         try {
             BufferedImage inputImage = ImageIO.read(inputFile);
 //            printPixelValues(inputImage);
             Scanner sc = new Scanner(System.in);
+            //Menu for choosing the operation to be performed
             System.out.println("Choose the operation you want to perform");
             System.out.println("1. Brightness");
             System.out.println("2. Grayscale");
@@ -25,6 +26,7 @@ public class Main {
             System.out.println("8. Blur image(Gaussian blur)");
             System.out.println("9. Pixelated blur");
             System.out.println("0. Exit");
+            //Loop for continuosly taking input from user
             while(true){
                 System.out.println("Enter your choice");
                 int choice = sc.nextInt();
@@ -173,6 +175,7 @@ public class Main {
         }
         return outputImage;
     }
+    //Unoptimized code for Gaussian blur
     public static BufferedImage GaussianBlurImage(BufferedImage inputImage, int blur){
         int height = inputImage.getHeight();
         int width = inputImage.getWidth();
@@ -207,20 +210,65 @@ public class Main {
         }
         return outputImage;
     }
-//    public static BufferedImage SharpenImage(BufferedImage inputImage, int sharpen){
-//        int height = inputImage.getHeight();
-//        int width = inputImage.getWidth();
-//        BufferedImage outputImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-//
-//    }
-//    public static BufferedImage EdgeDetection(BufferedImage inputImage, int edge){
-//        int height = inputImage.getHeight();
-//        int width = inputImage.getWidth();
-//        BufferedImage outputImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-//
-//
-//    }
-public static BufferedImage RotateClockwise90(BufferedImage inputImage) {
+   /* public static BufferedImage SharpenImage(BufferedImage inputImage, int sharpen){
+        int height = inputImage.getHeight();
+        int width = inputImage.getWidth();
+        BufferedImage outputImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+
+    }
+    public static BufferedImage EdgeDetection(BufferedImage inputImage, int edge){
+        int height = inputImage.getHeight();
+        int width = inputImage.getWidth();
+        BufferedImage outputImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+
+
+    }*/
+    //Optimised code for Gaussian blur using sliding window algorithm
+   /* public static BufferedImage GaussianBlurImage(BufferedImage inputImage, int blur) {
+        int height = inputImage.getHeight();
+        int width = inputImage.getWidth();
+        BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        // Loop through each pixel in the input image
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int sumRed = 0;
+                int sumGreen = 0;
+                int sumBlue = 0;
+                int count = 0;
+
+                // Define the sliding window
+                for (int x = -blur; x <= blur; x++) {
+                    for (int y = -blur; y <= blur; y++) {
+                        int pixelX = j + x;
+                        int pixelY = i + y;
+
+                        // Check if the window is within image bounds
+                        if (pixelX >= 0 && pixelX < width && pixelY >= 0 && pixelY < height) {
+                            Color pixel = new Color(inputImage.getRGB(pixelX, pixelY));
+                            sumRed += pixel.getRed();
+                            sumGreen += pixel.getGreen();
+                            sumBlue += pixel.getBlue();
+                            count++;
+                        }
+                    }
+                }
+
+                // Calculate the average color value
+                int avgRed = Math.min(255, Math.max(0, sumRed / count));
+                int avgGreen = Math.min(255, Math.max(0, sumGreen / count));
+                int avgBlue = Math.min(255, Math.max(0, sumBlue / count));
+
+                // Set the average color as the pixel value in the output image
+                outputImage.setRGB(j, i, new Color(avgRed, avgGreen, avgBlue).getRGB());
+            }
+        }
+        return outputImage;
+    }*/
+
+
+
+    public static BufferedImage RotateClockwise90(BufferedImage inputImage) {
     int height = inputImage.getHeight();
     int width = inputImage.getWidth();
     BufferedImage outputImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_RGB);
@@ -230,8 +278,6 @@ public static BufferedImage RotateClockwise90(BufferedImage inputImage) {
             outputImage.setRGB(height-i-1, j, inputImage.getRGB(j, i));
         }
     }
-
-
     return outputImage;
 }
 

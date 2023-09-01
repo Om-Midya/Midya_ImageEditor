@@ -28,7 +28,7 @@ public class BlurTest {
             System.out.println();
         }
     }
-    static int[][] blur(int[][] matrix, int blurRadius) {
+    /*static int[][] blur(int[][] matrix, int blurRadius) {
         // create an empty image to hold the result
         int[][] blurredMatrix = new int[matrix.length][matrix[0].length];  //initialized a matrix for storing the blurred values
 
@@ -50,6 +50,44 @@ public class BlurTest {
                 blurredMatrix[i][j] = sum / count; //storing the average of the elements in the blurRadius in the blurredMatrix
             }
         }
+        return blurredMatrix;
+    }*/
+    static int[][] blur(int[][] matrix, int blurRadius) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[][] blurredMatrix = new int[rows][cols];
+
+        // Calculate the initial sum for the first window
+        int sum = 0;
+        for (int i = 0; i <= blurRadius; i++) {
+            for (int j = 0; j <= blurRadius; j++) {
+                sum += matrix[i][j];
+            }
+        }
+
+        // Iterate through the image to calculate the blurred values
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Store the average in the blurredMatrix
+                blurredMatrix[i][j] = sum / ((Math.min(i + blurRadius, rows - 1) - Math.max(i - blurRadius, 0) + 1) *
+                        (Math.min(j + blurRadius, cols - 1) - Math.max(j - blurRadius, 0) + 1));
+
+                // Update sum for the next window
+                if (j + blurRadius + 1 < cols) {
+                    for (int k = Math.max(i - blurRadius, 0); k <= Math.min(i + blurRadius, rows - 1); k++) {
+                        sum += matrix[k][j + blurRadius + 1];
+                    }
+                }
+
+                // Remove elements from the previous window
+                if (j - blurRadius >= 0) {
+                    for (int k = Math.max(i - blurRadius, 0); k <= Math.min(i + blurRadius, rows - 1); k++) {
+                        sum -= matrix[k][j - blurRadius];
+                    }
+                }
+            }
+        }
+
         return blurredMatrix;
     }
 
